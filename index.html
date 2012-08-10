@@ -2,6 +2,14 @@
 <html>
 <head>
     <title>Slingshot pulling back</title>
+    <style>
+        .float_left {
+            float: left;
+        }
+        .clear {
+            clear: both;
+        }
+    </style>
     <script type="text/javascript">
         var cwidth = 1200;
         var cheight = 600;
@@ -239,15 +247,18 @@
 </script>
 </head>
 <body onLoad="init();">
-<canvas id="canvas" width="1200"
- height="600">
+<canvas id="canvas" width="1200" height="600" class="float_left clear">
 Your browser doesn't support the
  HTML5 element canvas.
 </canvas>
-<br/>
+<h3 class="float_left clear">
+    <a href="" onlick="init();">start again</a>
+</h3>
+<p class="float_left clear">
 Hold mouse down and drag ball. Releasing
  the mouse button will shoot the catapult.
   The catapult remains at the last position.
 Reload page to try again.
+</p>
 </body>
 </html>
