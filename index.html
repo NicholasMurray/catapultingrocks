@@ -13,7 +13,7 @@
         var startrocky = 240;
         var ballx = startrockx;
         var bally = startrocky;
-        var ballrad = 10;
+        var ballrad = 20;
         var ballradsq = ballrad * ballrad;
         var inmotion = false;
         var horvelocity;
@@ -142,6 +142,12 @@
             canvas1.addEventListener('mouseup',
          finish, false);
             drawall();
+
+        
+        canvas.addEventListener( 'touchstart', findball, false ); 
+        canvas.addEventListener( 'touchmove', moveit, false ); 
+        canvas.addEventListener( 'touchend', finish, false ); 
+
         }
         function findball(ev) {
             var mx;
@@ -240,8 +246,8 @@ Your browser doesn't support the
 </canvas>
 <br/>
 Hold mouse down and drag ball. Releasing
- the mouse button will shoot the slingshot.
-  Slingshot remains at the last position.
+ the mouse button will shoot the catapult.
+  The catapult remains at the last position.
 Reload page to try again.
 </body>
 </html>
