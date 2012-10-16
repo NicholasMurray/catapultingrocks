@@ -32,8 +32,9 @@
       chicken.src = "images/chicken.jpg";
       var feathers = new Image();
       feathers.src = "images/feather.jpg";
-      function Sling(bx, by, s1x, s1y, s2x, s2y,
-      s3x, s3y, stylestring) {
+
+
+      function Sling(bx, by, s1x, s1y, s2x, s2y, s3x, s3y, stylestring) {
           this.bx = bx;
           this.by = by;
           this.s1x = s1x;
@@ -46,6 +47,7 @@
           this.draw = drawsling;
           this.moveit = movesling;
       }
+
       function drawsling() {
           ctx.strokeStyle = this.strokeStyle;
           ctx.lineWidth = 4;
@@ -59,6 +61,7 @@
           ctx.lineTo(this.s3x, this.s3y);
           ctx.stroke();
       }
+
       function movesling(dx, dy) {
           this.bx += dx;
           this.by += dy;
@@ -69,14 +72,9 @@
           this.s3x += dx;
           this.s3y += dy;
       }
-      var mysling = new
-      Sling(startrockx, startrocky,
 
-      startrockx + 80, startrocky - 10, startrockx + 80,
-
-       startrocky + 10, startrockx + 70,
-
-      startrocky + 180, "rgb(120,20,10)");
+      var mysling = new Sling(startrockx, startrocky, startrockx + 80, startrocky - 10, startrockx + 80, startrocky + 10, startrockx + 70,startrocky + 180, "rgb(120,20,10)");
+      
       function Ball(sx, sy, rad, stylestring) {
           this.sx = sx;
           this.sy = sy;
@@ -85,11 +83,11 @@
           this.moveit = moveball;
           this.fillstyle = stylestring;
       }
+
       function drawball() {
           ctx.fillStyle = this.fillstyle;
           ctx.beginPath();
-          ctx.arc(this.sx, this.sy, this.rad,
-  0, Math.PI * 2, true);
+          ctx.arc(this.sx, this.sy, this.rad, 0, Math.PI * 2, true);
           ctx.fill();
       }
 
@@ -98,8 +96,9 @@
           this.sy += dy;
       }
 
-      var cball = new Ball(startrockx, startrocky,
-      ballrad, "rgb(250,0,0)");
+      var cball = new Ball(startrockx, startrocky, ballrad, "rgb(250,0,0)");
+
+
       function myrectangle(sx, sy, swidth,
       sheight, stylestring) {
           this.sx = sx;
@@ -110,11 +109,12 @@
           this.draw = drawrects;
           this.moveit = moveball;
       }
+
       function drawrects() {
           ctx.fillStyle = this.fillstyle;
-          ctx.fillRect(this.sx, this.sy,
-  this.swidth, this.sheight);
+          ctx.fillRect(this.sx, this.sy, this.swidth, this.sheight);
       }
+
       function Picture(sx, sy, swidth,
       sheight, imga) {
           this.sx = sx;
@@ -125,60 +125,54 @@
           this.draw = drawAnImage;
           this.moveit = moveball;
       }
+
       function drawAnImage() {
-          ctx.drawImage(this.img, this.sx, this.sy,
-              this.swidth, this.sheight);
+          ctx.drawImage(this.img, this.sx, this.sy, this.swidth, this.sheight);
       }
-      var target = new Picture(700, 210, 209,
-      179, chicken);
-      var ground = new myrectangle(0, 370,
-      1200, 30, "rgb(10,250,0)");
+
+      var target = new Picture(700, 210, 209, 179, chicken);
+
+      var ground = new myrectangle(0, 370, 1200, 30, "rgb(10,250,0)");
+
       everything.push(target);
       everything.push(ground);
       everything.push(mysling);
       everything.push(cball);
+
       function init() {
-          ctx = document.getElementById
-       ('canvas').getContext('2d');
-          canvas1 = document.getElementById
-      ('canvas');
-          canvas1.addEventListener('mousedown',
-       findball, false);
-          canvas1.addEventListener('mousemove',
-       moveit, false);
-          canvas1.addEventListener('mouseup',
-       finish, false);
+          ctx = document.getElementById('canvas').getContext('2d');
+          canvas1 = document.getElementById('canvas');
+          canvas1.addEventListener('mousedown',findball, false);
+          canvas1.addEventListener('mousemove',moveit, false);
+          canvas1.addEventListener('mouseup',finish, false);
           drawall();
 
-      
-      canvas.addEventListener( 'touchstart', findball, false ); 
-      canvas.addEventListener( 'touchmove', moveit, false ); 
-      canvas.addEventListener( 'touchend', finish, false ); 
-
+          canvas.addEventListener( 'touchstart', findball, false ); 
+          canvas.addEventListener( 'touchmove', moveit, false ); 
+          canvas.addEventListener( 'touchend', finish, false ); 
       }
+
       function findball(ev) {
           var mx;
           var my;
-          if (ev.layerX || ev.layerX
-  == 0) {
+          if (ev.layerX || ev.layerX == 0) {
               mx = ev.layerX;
               my = ev.layerY;
           }
-          else if (ev.offsetX || ev.offsetX
-       == 0) {
+          else if (ev.offsetX || ev.offsetX == 0) {
               mx = ev.offsetX;
               my = ev.offsetY;
           }
-          if (distsq(mx, my, cball.sx,
-  cball.sy) < ballradsq) {
+          if (distsq(mx, my, cball.sx, cball.sy) < ballradsq) {
               inmotion = true;
               drawall();
           }
       }
+
       function distsq(x1, y1, x2, y2) {
-          return (x1 - x2) * (x1 - x2) + (y1 - y2) *
-  (y1 - y2);
+          return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
       }
+
       function moveit(ev) {
           var mx;
           var my;
@@ -197,6 +191,7 @@
               drawall();
           }
       }
+
       function finish(ev) {
           if (inmotion) {
               inmotion = false;
@@ -215,6 +210,7 @@
               tid = setInterval(change, 100);
           }
       }
+
       function drawall() {
           ctx.clearRect(0, 0, cwidth, cheight);
           var i;
@@ -222,19 +218,16 @@
               everything[i].draw();
           }
       }
+
       function change() {
           var dx = horvelocity;
           verticalvel2 = verticalvel1 + gravity;
-          var dy = (verticalvel1 +
-  verticalvel2) * .5;
+          var dy = (verticalvel1 + verticalvel2) * .5;
           verticalvel1 = verticalvel2;
           cball.moveit(dx, dy);
           var bx = cball.sx;
           var by = cball.sy;
-          if ((bx >= target.sx + 40) && (bx <=
-  (target.sx + target.swidth - 40)) &&
-   (by >= target.sy + 40) && (by <=
-  (target.sy + target.sheight - 40))) {
+          if ((bx >= target.sx + 40) && (bx <= (target.sx + target.swidth - 40)) && (by >= target.sy + 40) && (by <= (target.sy + target.sheight - 40))) {
               target.img = feathers;
           }
           if (by >= ground.sy) {
