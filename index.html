@@ -1,7 +1,8 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Slingshot pulling back</title>
+  
   <style>
       .float_left {
           float: left;
@@ -10,6 +11,7 @@
           clear: both;
       }
   </style>
+
   <script type="text/javascript">
       var cwidth = 1200;
       var cheight = 600;
@@ -32,6 +34,16 @@
       chicken.src = "images/chicken.jpg";
       var feathers = new Image();
       feathers.src = "images/feather.jpg";
+
+      var target = new Picture(700, 210, 209, 179, chicken);
+      var ground = new myrectangle(0, 370, 1200, 30, "rgb(10,250,0)");
+      var mysling = new Sling(startrockx, startrocky, startrockx + 80, startrocky - 10, startrockx + 80, startrocky + 10, startrockx + 70,startrocky + 180, "rgb(120,20,10)");
+      var cball = new Ball(startrockx, startrocky, ballrad, "rgb(250,0,0)");
+
+      everything.push(target);
+      everything.push(ground);
+      everything.push(mysling);
+      everything.push(cball);
 
 
       function Sling(bx, by, s1x, s1y, s2x, s2y, s3x, s3y, stylestring) {
@@ -73,7 +85,7 @@
           this.s3y += dy;
       }
 
-      var mysling = new Sling(startrockx, startrocky, startrockx + 80, startrocky - 10, startrockx + 80, startrocky + 10, startrockx + 70,startrocky + 180, "rgb(120,20,10)");
+      
       
       function Ball(sx, sy, rad, stylestring) {
           this.sx = sx;
@@ -96,7 +108,7 @@
           this.sy += dy;
       }
 
-      var cball = new Ball(startrockx, startrocky, ballrad, "rgb(250,0,0)");
+      
 
 
       function myrectangle(sx, sy, swidth,
@@ -130,14 +142,7 @@
           ctx.drawImage(this.img, this.sx, this.sy, this.swidth, this.sheight);
       }
 
-      var target = new Picture(700, 210, 209, 179, chicken);
-
-      var ground = new myrectangle(0, 370, 1200, 30, "rgb(10,250,0)");
-
-      everything.push(target);
-      everything.push(ground);
-      everything.push(mysling);
-      everything.push(cball);
+      
 
       function init() {
           ctx = document.getElementById('canvas').getContext('2d');
@@ -195,17 +200,12 @@
       function finish(ev) {
           if (inmotion) {
               inmotion = false;
-              var outofcannon =
-              distsq(mysling.bx, mysling.by,
+              var outofcannon = distsq(mysling.bx, mysling.by,
 
               mysling.s1x, mysling.s1y) / 700;
-              var angleradians = -Math.atan2
-            (mysling.s1y - mysling.by,
-            mysling.s1x - mysling.bx);
-              horvelocity = outofcannon * Math.cos
-            (angleradians);
-              verticalvel1 = -outofcannon * Math.sin
-            (angleradians);
+              var angleradians = -Math.atan2(mysling.s1y - mysling.by, mysling.s1x - mysling.bx);
+              horvelocity = outofcannon * Math.cos(angleradians);
+              verticalvel1 = -outofcannon * Math.sin(angleradians);
               drawall();
               tid = setInterval(change, 100);
           }
