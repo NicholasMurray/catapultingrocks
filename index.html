@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Slingshot pulling back</title>
+  <title>Crazy Catapult</title>
   
   <style>
       .float_left {
@@ -10,6 +10,7 @@
       .clear {
           clear: both;
       }
+      #canvas { margin-left: 20px; }
   </style>
 
   <script type="text/javascript">
@@ -21,29 +22,36 @@
       var tid;
       var startrockx = 100;
       var startrocky = 240;
-      var ballx = startrockx;
-      var bally = startrocky;
-      var ballrad = 20;
-      var ballradsq = ballrad * ballrad;
+      var rockx = startrockx;
+      var rocky = startrocky;
+      var rockrad = 20;
+      var rockradsq = rockrad * rockrad;
       var inmotion = false;
       var horvelocity;
       var verticalvel1;
       var verticalvel2;
       var gravity = 2;
+      var groundcolour;
+      var slingcolour;
+      var rockcolour;
       var chicken = new Image();
       chicken.src = "images/chicken.jpg";
       var feathers = new Image();
       feathers.src = "images/feather.jpg";
+      groundcolour = "rgb(10,250,0)";
+      slingcolour = "rgb(120,20,10)";
+      rockcolour = "rgb(250,0,0)";
+
 
       var target = new Picture(700, 210, 209, 179, chicken);
-      var ground = new myrectangle(0, 370, 1200, 30, "rgb(10,250,0)");
-      var mysling = new Sling(startrockx, startrocky, startrockx + 80, startrocky - 10, startrockx + 80, startrocky + 10, startrockx + 70,startrocky + 180, "rgb(120,20,10)");
-      var cball = new Ball(startrockx, startrocky, ballrad, "rgb(250,0,0)");
+      var ground = new myrectangle(0, 370, 1200, 30, groundcolour);
+      var mysling = new Sling(startrockx, startrocky, startrockx + 80, startrocky - 10, startrockx + 80, startrocky + 10, startrockx + 70,startrocky + 180, slingcolour);
+      var myrock = new rock(startrockx, startrocky, rockrad, rockcolour);
 
       everything.push(target);
       everything.push(ground);
       everything.push(mysling);
-      everything.push(cball);
+      everything.push(myrock);
 
 
       function Sling(bx, by, s1x, s1y, s2x, s2y, s3x, s3y, stylestring) {
@@ -87,23 +95,23 @@
 
       
       
-      function Ball(sx, sy, rad, stylestring) {
+      function rock(sx, sy, rad, stylestring) {
           this.sx = sx;
           this.sy = sy;
           this.rad = rad;
-          this.draw = drawball;
-          this.moveit = moveball;
+          this.draw = drawrock;
+          this.moveit = moverock;
           this.fillstyle = stylestring;
       }
 
-      function drawball() {
+      function drawrock() {
           ctx.fillStyle = this.fillstyle;
           ctx.beginPath();
           ctx.arc(this.sx, this.sy, this.rad, 0, Math.PI * 2, true);
           ctx.fill();
       }
 
-      function moveball(dx, dy) {
+      function moverock(dx, dy) {
           this.sx += dx;
           this.sy += dy;
       }
@@ -119,7 +127,7 @@
           this.sheight = sheight;
           this.fillstyle = stylestring;
           this.draw = drawrects;
-          this.moveit = moveball;
+          this.moveit = moverock;
       }
 
       function drawrects() {
@@ -135,7 +143,7 @@
           this.swidth = swidth;
           this.sheight = sheight;
           this.draw = drawAnImage;
-          this.moveit = moveball;
+          this.moveit = moverock;
       }
 
       function drawAnImage() {
@@ -147,17 +155,17 @@
       function init() {
           ctx = document.getElementById('canvas').getContext('2d');
           canvas1 = document.getElementById('canvas');
-          canvas1.addEventListener('mousedown',findball, false);
+          canvas1.addEventListener('mousedown',findrock, false);
           canvas1.addEventListener('mousemove',moveit, false);
           canvas1.addEventListener('mouseup',finish, false);
           drawall();
 
-          canvas.addEventListener( 'touchstart', findball, false ); 
+          canvas.addEventListener( 'touchstart', findrock, false ); 
           canvas.addEventListener( 'touchmove', moveit, false ); 
           canvas.addEventListener( 'touchend', finish, false ); 
       }
 
-      function findball(ev) {
+      function findrock(ev) {
           var mx;
           var my;
           if (ev.layerX || ev.layerX == 0) {
@@ -168,7 +176,7 @@
               mx = ev.offsetX;
               my = ev.offsetY;
           }
-          if (distsq(mx, my, cball.sx, cball.sy) < ballradsq) {
+          if (distsq(mx, my, myrock.sx, myrock.sy) < rockradsq) {
               inmotion = true;
               drawall();
           }
@@ -189,8 +197,8 @@
                   mx = ev.offsetX;
                   my = ev.offsetY;
               }
-              cball.sx = mx;
-              cball.sy = my;
+              myrock.sx = mx;
+              myrock.sy = my;
               mysling.bx = mx;
               mysling.by = my;
               drawall();
@@ -224,9 +232,9 @@
           verticalvel2 = verticalvel1 + gravity;
           var dy = (verticalvel1 + verticalvel2) * .5;
           verticalvel1 = verticalvel2;
-          cball.moveit(dx, dy);
-          var bx = cball.sx;
-          var by = cball.sy;
+          myrock.moveit(dx, dy);
+          var bx = myrock.sx;
+          var by = myrock.sy;
           if ((bx >= target.sx + 40) && (bx <= (target.sx + target.swidth - 40)) && (by >= target.sy + 40) && (by <= (target.sy + target.sheight - 40))) {
               target.img = feathers;
           }
