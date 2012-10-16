@@ -4,13 +4,12 @@
   <title>Crazy Catapult</title>
   
   <style>
-      .float_left {
-          float: left;
-      }
       .clear {
           clear: both;
       }
-      #canvas { margin-left: 20px; }
+      .left_margin_20  { 
+        margin-left: 20px; 
+     }
   </style>
 
   <script type="text/javascript">
@@ -32,29 +31,30 @@
       var verticalvel2;
       var gravity = 2;
       var groundcolour;
-      var slingcolour;
+      var catapultcolour;
       var rockcolour;
       var chicken = new Image();
-      chicken.src = "images/chicken.jpg";
       var feathers = new Image();
+      
       feathers.src = "images/feather.jpg";
-      groundcolour = "rgb(10,250,0)";
-      slingcolour = "rgb(120,20,10)";
-      rockcolour = "rgb(250,0,0)";
+      chicken.src = "images/chicken.jpg";
+      groundcolour = "#0AFA00";
+      catapultcolour = "#78140A";
+      rockcolour = "#FA0000";
 
 
       var target = new Picture(700, 210, 209, 179, chicken);
       var ground = new myrectangle(0, 370, 1200, 30, groundcolour);
-      var mysling = new Sling(startrockx, startrocky, startrockx + 80, startrocky - 10, startrockx + 80, startrocky + 10, startrockx + 70,startrocky + 180, slingcolour);
+      var mycatapult = new catapult(startrockx, startrocky, startrockx + 80, startrocky - 10, startrockx + 80, startrocky + 10, startrockx + 70, startrocky + 180, catapultcolour);
       var myrock = new rock(startrockx, startrocky, rockrad, rockcolour);
 
       everything.push(target);
       everything.push(ground);
-      everything.push(mysling);
+      everything.push(mycatapult);
       everything.push(myrock);
 
 
-      function Sling(bx, by, s1x, s1y, s2x, s2y, s3x, s3y, stylestring) {
+      function catapult(bx, by, s1x, s1y, s2x, s2y, s3x, s3y, stylestring) {
           this.bx = bx;
           this.by = by;
           this.s1x = s1x;
@@ -64,11 +64,11 @@
           this.s3x = s3x;
           this.s3y = s3y;
           this.strokeStyle = stylestring;
-          this.draw = drawsling;
-          this.moveit = movesling;
+          this.draw = drawcatapult;
+          this.moveit = movecatapult;
       }
 
-      function drawsling() {
+      function drawcatapult() {
           ctx.strokeStyle = this.strokeStyle;
           ctx.lineWidth = 4;
           ctx.beginPath();
@@ -82,7 +82,7 @@
           ctx.stroke();
       }
 
-      function movesling(dx, dy) {
+      function movecatapult(dx, dy) {
           this.bx += dx;
           this.by += dy;
           this.s1x += dx;
@@ -116,8 +116,6 @@
           this.sy += dy;
       }
 
-      
-
 
       function myrectangle(sx, sy, swidth,
       sheight, stylestring) {
@@ -150,29 +148,15 @@
           ctx.drawImage(this.img, this.sx, this.sy, this.swidth, this.sheight);
       }
 
-      
-
-      function init() {
-          ctx = document.getElementById('canvas').getContext('2d');
-          canvas1 = document.getElementById('canvas');
-          canvas1.addEventListener('mousedown',findrock, false);
-          canvas1.addEventListener('mousemove',moveit, false);
-          canvas1.addEventListener('mouseup',finish, false);
-          drawall();
-
-          canvas.addEventListener( 'touchstart', findrock, false ); 
-          canvas.addEventListener( 'touchmove', moveit, false ); 
-          canvas.addEventListener( 'touchend', finish, false ); 
-      }
 
       function findrock(ev) {
           var mx;
           var my;
-          if (ev.layerX || ev.layerX == 0) {
+          if (ev.layerX || ev.layerX === 0) {
               mx = ev.layerX;
               my = ev.layerY;
           }
-          else if (ev.offsetX || ev.offsetX == 0) {
+          else if (ev.offsetX || ev.offsetX === 0) {
               mx = ev.offsetX;
               my = ev.offsetY;
           }
@@ -190,17 +174,17 @@
           var mx;
           var my;
           if (inmotion) {
-              if (ev.layerX || ev.layerX == 0) {
+              if (ev.layerX || ev.layerX === 0) {
                   mx = ev.layerX;
                   my = ev.layerY;
-              } else if (ev.offsetX || ev.offsetX == 0) {
+              } else if (ev.offsetX || ev.offsetX === 0) {
                   mx = ev.offsetX;
                   my = ev.offsetY;
               }
               myrock.sx = mx;
               myrock.sy = my;
-              mysling.bx = mx;
-              mysling.by = my;
+              mycatapult.bx = mx;
+              mycatapult.by = my;
               drawall();
           }
       }
@@ -208,12 +192,12 @@
       function finish(ev) {
           if (inmotion) {
               inmotion = false;
-              var outofcannon = distsq(mysling.bx, mysling.by,
+              var outofcatapult = distsq(mycatapult.bx, mycatapult.by,
 
-              mysling.s1x, mysling.s1y) / 700;
-              var angleradians = -Math.atan2(mysling.s1y - mysling.by, mysling.s1x - mysling.bx);
-              horvelocity = outofcannon * Math.cos(angleradians);
-              verticalvel1 = -outofcannon * Math.sin(angleradians);
+              mycatapult.s1x, mycatapult.s1y) / 700;
+              var angleradians = -Math.atan2(mycatapult.s1y - mycatapult.by, mycatapult.s1x - mycatapult.bx);
+              horvelocity = outofcatapult * Math.cos(angleradians);
+              verticalvel1 = -outofcatapult * Math.sin(angleradians);
               drawall();
               tid = setInterval(change, 100);
           }
@@ -244,14 +228,29 @@
           drawall();
       }
 
+      function init() {
+          ctx = document.getElementById('canvas').getContext('2d');
+          canvas1 = document.getElementById('canvas');
+
+          canvas1.addEventListener('mousedown',findrock, false);
+          canvas1.addEventListener('mousemove',moveit, false);
+          canvas1.addEventListener('mouseup',finish, false);
+          
+          canvas.addEventListener( 'touchstart', findrock, false ); 
+          canvas.addEventListener( 'touchmove', moveit, false ); 
+          canvas.addEventListener( 'touchend', finish, false ); 
+
+          drawall();
+      }
+
 </script>
 </head>
 <body onLoad="init();">
-<canvas id="canvas" width="900" height="400" class="float_left clear">
+<canvas id="canvas" class="clear left_margin_20" width="900" height="400" class="float_left clear">
 -Your browser doesn't support the
 - HTML5 element canvas.
 </canvas>
-<h3 class="float_left clear">
+<h3 class="clear left_margin_20">
   <a href="" onlick="init();">start again</a>
 </h3>
 </body>
